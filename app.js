@@ -1,6 +1,9 @@
 var koa = require('koa');
 var app = module.exports = koa();
 var routes = require('koa-route');
+var logger = require('koa-logger');
+
+app.use(logger());
 
 // routes
 var userController = require('./controller/users.js');
