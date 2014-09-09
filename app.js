@@ -5,13 +5,23 @@ var logger = require('koa-logger');
 
 app.use(logger());
 
-// routes
+ ///////////////
+//   routes  //
+//////////////
+
+// users
 var userController = require('./controller/users.js');
 app.use(routes.post('/users', userController.add));
 app.use(routes.get('/users/:id', userController.get));
 app.use(routes.get('/users', userController.getAll));
 app.use(routes.put('/users/:id', userController.update));
 app.use(routes.del('/users/:id', userController.remove));
+
+//cats
+var catController = require('./controller/cats.js');
+app.use(routes.post('/cats', catController.add));
+
+
 
 // Fire it up
 app.listen(3000);
