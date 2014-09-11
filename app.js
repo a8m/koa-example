@@ -21,8 +21,10 @@ app.use(routes.del('/users/:id', userController.remove));
 var catController = require('./controller/cats.js');
 app.use(routes.post('/cats', catController.add));
 
-
+//http.createServer(app.callback()).listen(3000);
+app.callback = function() {
+  console.log('The app is listening. Port: %d', 3000);
+};
 
 // Fire it up
 app.listen(3000);
-console.log('The app is listening. Port 3000');

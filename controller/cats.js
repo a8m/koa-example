@@ -2,6 +2,8 @@
 var thunkify = require('thunkify');
 var parse = require("co-body");
 var mongoose = require('mongoose');
+var wrap = require('../co-mongoose');
+
 mongoose.connect('localhost/catsApi');
 
 var db = mongoose.connection;
@@ -9,6 +11,7 @@ var db = mongoose.connection;
 var kittySchema = mongoose.Schema({
   name: String
 });
+
 var Kitten = mongoose.model('Kitten', kittySchema);
 
 module.exports = {
@@ -20,6 +23,7 @@ module.exports = {
     cat.save = thunkify(cat.save);
 
     yield cat.save();
+
     this.status = 200;
     this.body = body;
   }
