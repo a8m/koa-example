@@ -4,12 +4,9 @@ var routes = require('koa-route');
 var logger = require('koa-logger');
 
 app.use(logger());
+app.use(errorHandler());
 
- ///////////////
-//   routes  //
-//////////////
-
-// users
+// routes
 var userController = require('./controller/users.js');
 app.use(routes.post('/users', userController.add));
 app.use(routes.get('/users/:id', userController.get));
@@ -17,9 +14,21 @@ app.use(routes.get('/users', userController.getAll));
 app.use(routes.put('/users/:id', userController.update));
 app.use(routes.del('/users/:id', userController.remove));
 
-//cats
-var catController = require('./controller/cats.js');
-app.use(routes.post('/cats', catController.add));
+function errorHandler() {
+  return function* (next) {
+    //try catch all downstream here
+    try {
+      yield next;
+    } catch (err) {
+      //set response status
+      this.status = 500;
+      //set response body
+      this.body = 'Internal server error';
+      //emit event for log
+      this.app.emit('error', err, this);
+    }
+  }
+}
 
 //http.createServer(app.callback()).listen(3000);
 app.callback = function() {
@@ -27,4 +36,4 @@ app.callback = function() {
 };
 
 // Fire it up
-app.listen(3000);
+app.listen(process.argv[2] || 3000);
